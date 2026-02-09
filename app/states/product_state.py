@@ -168,6 +168,10 @@ class ProductState(rx.State):
         return [p for p in self.products if p["category"] == self.category_filter]
 
     @rx.event
+    def set_filter(self, category: str):
+        self.category_filter = category
+
+    @rx.event
     def select_size(self, size: str):
         self.selected_size = size
 

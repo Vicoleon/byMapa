@@ -21,6 +21,48 @@ from app.components.admin_components import (
     content_management_view,
     settings_view,
 )
+from app.components.category_layout import category_page_layout
+
+
+def index() -> rx.Component:
+    return rx.el.main(
+        announcement_bar(),
+        navbar(),
+        hero_section(),
+        the_drop_section(),
+        marquee_break(),
+        trend_edit_section(),
+        newsletter_section(),
+        footer(),
+        class_name="font-['Inter'] selection:bg-[#E91E8C] selection:text-white",
+    )
+
+
+def ropa_page() -> rx.Component:
+    return category_page_layout(
+        title="ROPA",
+        subtitle="Diseños que desafían lo convencional. / Editorial ready.",
+        filters=["Todo", "Vestidos", "Tops", "Pantalones", "Faldas"],
+        products_var=ProductState.filtered_ropa,
+    )
+
+
+def sets_page() -> rx.Component:
+    return category_page_layout(
+        title="SETS",
+        subtitle="Coordinación sin esfuerzo. Impacto máximo.",
+        filters=["Todo"],
+        products_var=ProductState.filtered_sets,
+    )
+
+
+def accesorios_page() -> rx.Component:
+    return category_page_layout(
+        title="ACCESORIOS",
+        subtitle="El punto final de cualquier declaración de estilo.",
+        filters=["Todo", "Bolsos", "Joyería", "Gafas"],
+        products_var=ProductState.filtered_accesorios,
+    )
 
 
 def login_page() -> rx.Component:
@@ -109,20 +151,6 @@ def admin_dashboard() -> rx.Component:
     )
 
 
-def index() -> rx.Component:
-    return rx.el.main(
-        announcement_bar(),
-        navbar(),
-        hero_section(),
-        the_drop_section(),
-        marquee_break(),
-        trend_edit_section(),
-        newsletter_section(),
-        footer(),
-        class_name="font-['Inter'] selection:bg-[#E91E8C] selection:text-white",
-    )
-
-
 app = rx.App(
     theme=rx.theme(appearance="light"),
     head_components=[
@@ -145,5 +173,12 @@ app = rx.App(
     ],
 )
 app.add_page(index, route="/")
+app.add_page(ropa_page, route="/ropa", on_load=lambda: ProductState.set_filter("Todo"))
+app.add_page(sets_page, route="/sets", on_load=lambda: ProductState.set_filter("Todo"))
+app.add_page(
+    accesorios_page,
+    route="/accesorios",
+    on_load=lambda: ProductState.set_filter("Todo"),
+)
 app.add_page(login_page, route="/login")
 app.add_page(admin_dashboard, route="/admin", on_load=AuthState.check_auth)
